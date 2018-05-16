@@ -7,8 +7,12 @@ package br.edu.ifsul.ws;
 
 import com.google.gson.Gson;
 import br.edu.ifsul.dao.RetiradaDAO;
+import br.edu.ifsul.dao.VeiculoDAO;
 import br.edu.ifsul.modelo.Retirada;
+import br.edu.ifsul.modelo.Veiculo;
+import java.io.Serializable;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -17,18 +21,23 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
  *
  * @author ubiratan
  */
-@Path("Retiradas")
-public class SSJFrotaWS {
+@Stateless
+@Path("retiradas")
+public class SSJFrotaWS implements Serializable{
 
     @Context
     private UriInfo context;
+    private Gson gson = new Gson();
 
     /**
      * Creates a new instance of SSJFrotaWS
@@ -40,15 +49,10 @@ public class SSJFrotaWS {
      * Retrieves representation of an instance of br.edu.ifsul.ws.SSJFrotaWS
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        return "Meu primeiro WS REST";
-    }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("Retirada/list")
+    @Path("list")
     public String listRetiradas()
     {
         List<Retirada> lista;
@@ -63,12 +67,12 @@ public class SSJFrotaWS {
     
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    @Path("Retirada/inserir")
-public boolean inserir(String content){
-     Gson g = new Gson();
-    Retirada u = (Retirada) g.fromJson(content, Retirada.class);
+    @Path("inserir")
+public boolean inserir(Retirada retirada){
+//     Gson g = new Gson();
+//    Retirada u = (Retirada) g.fromJson(content, Retirada.class);
         RetiradaDAO dao = new RetiradaDAO();  
-        return dao.inserir(u);
+        return dao.inserir(retirada);
 }
     
     /**
@@ -78,11 +82,43 @@ public boolean inserir(String content){
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("Retirada/alterar")
+    @Path("alterar")
     public void alterar(String content) {
         Gson g = new Gson();
         Retirada u = (Retirada) g.fromJson(content, Retirada.class);
         RetiradaDAO dao = new RetiradaDAO();  
         dao.atualizar(u);
+    }
+    
+    /**
+     * PUT method for updating or creating an instance of FazendaWS
+     * @param placa representation for the resource
+     * @return an HTTP response with content of the updated or created resource.
+     */
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("teste/{placa}")
+    public Retirada teste(@PathParam("placa") String placa) {
+        RetiradaDAO dao = new RetiradaDAO();
+        Retirada retirada = dao.getLastRetiradaByPlaca(placa);
+        return retirada;
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("buscaVeiculo/{codigo}")
+    public Response teste(@PathParam("codigo") Integer codigo) {
+        RetiradaDAO dao = new RetiradaDAO();
+        Veiculo veiculo = dao.getVeiculo(codigo);
+        return Response.ok(gson.toJson(veiculo)).build();
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("buscaRetirada/{codigo}")
+    public Response buscaRetirada(@PathParam("codigo") Integer codigo) {
+        RetiradaDAO dao = new RetiradaDAO();
+        Retirada ret = dao.buscar(codigo);
+        return Response.ok(gson.toJson(ret)).build();
     }
 }

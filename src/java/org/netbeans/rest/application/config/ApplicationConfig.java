@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifsul.ws;
+package org.netbeans.rest.application.config;
 
+import br.edu.ifsul.ws.CORSFilter;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
@@ -12,7 +13,7 @@ import javax.ws.rs.core.Application;
  *
  * @author ubiratan
  */
-@javax.ws.rs.ApplicationPath("webresources")
+@javax.ws.rs.ApplicationPath("servico")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -29,6 +30,8 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(CORSFilter.class);
+        resources.add(br.edu.ifsul.ws.CORSFilter.class);
         resources.add(br.edu.ifsul.ws.SSJFrotaWS.class);
     }
     

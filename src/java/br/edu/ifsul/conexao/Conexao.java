@@ -44,7 +44,7 @@ public class Conexao {
             try {
                 // defino a classe do driver a ser usado
                 Class.forName(driver);
-                // criação da conexão com o BD
+                // criação da conexão com o BD              
                 con = 
                 DriverManager.getConnection(
                         banco, usuario, senha);
@@ -65,6 +65,21 @@ public class Conexao {
     public static PreparedStatement getPreparedStatement(String sql){
         // testo se a conexão já foi criada
         if (con == null){
+            // cria a conexão
+            con = getConexao();
+        }
+        try {
+            // retorna um objeto java.sql.PreparedStatement
+            return con.prepareStatement(sql);
+        } catch (SQLException e){
+            System.out.println("Erro de sql: "+
+                    e.getMessage());
+        }
+        return null;
+    }
+
+    public static PreparedStatement getPreparedStatement(String sql, int TYPE_SCROLL_INSENSITIVE, int CONCUR_UPDATABLE) {
+         if (con == null){
             // cria a conexão
             con = getConexao();
         }
