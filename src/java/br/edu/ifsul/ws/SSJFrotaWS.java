@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("retiradas")
-public class SSJFrotaWS implements Serializable{
+public class SSJFrotaWS implements Serializable {
 
     @Context
     private UriInfo context;
@@ -43,79 +43,88 @@ public class SSJFrotaWS implements Serializable{
      * Creates a new instance of SSJFrotaWS
      */
     public SSJFrotaWS() {
+        
     }
 
     /**
      * Retrieves representation of an instance of br.edu.ifsul.ws.SSJFrotaWS
+     *
      * @return an instance of java.lang.String
      */
-    
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("list")
-    public String listRetiradas()
-    {
+    @Produces("application/json; charset=ISO-8859-1")
+    public String listRetiradas() {
         List<Retirada> lista;
-        
+
         RetiradaDAO dao = new RetiradaDAO();
         lista = dao.listar();
-        
+
         //Converter para Gson
         Gson g = new Gson();
         return g.toJson(lista);
     }
-    
+
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
     @Path("inserir")
-public boolean inserir(Retirada retirada){
+    @Consumes("application/json; charset=ISO-8859-1")
+    @Produces("application/json; charset=ISO-8859-1")
+    public Response inserir(Retirada retirada) {
 //     Gson g = new Gson();
 //    Retirada u = (Retirada) g.fromJson(content, Retirada.class);
-        RetiradaDAO dao = new RetiradaDAO();  
-        return dao.inserir(retirada);
-}
+        RetiradaDAO dao = new RetiradaDAO();
+        Retirada r = dao.inserirRetirada(retirada);
+        return Response.ok(gson.toJson(r)).build();
+      //  return dao.inserir(retirada);
+    }
     
-    /**
-     * PUT method for updating or creating an instance of FazendaWS
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
+//    @POST
+//    @Consumes("application/json; charset=ISO-8859-1")
+//    @Produces("application/json; charset=ISO-8859-1")
+//    public Response salarioLiquido(Salario salario){
+//        if (salario.getSalarioBruto() <= 0.0 || salario.getNome().isEmpty()){
+//            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+//        }
+//        salario.setInss(calculoInss(salario.getSalarioBruto()));
+//        salario.setSalarioLiquido(salario.getSalarioBruto() - salario.getInss());
+//        return Response.ok(gson.toJson(salario)).build();
+//    }
+  
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
     @Path("alterar")
+    @Produces("application/json; charset=ISO-8859-1")
     public void alterar(String content) {
         Gson g = new Gson();
         Retirada u = (Retirada) g.fromJson(content, Retirada.class);
-        RetiradaDAO dao = new RetiradaDAO();  
+        RetiradaDAO dao = new RetiradaDAO();
         dao.atualizar(u);
     }
+
     
-    /**
-     * PUT method for updating or creating an instance of FazendaWS
-     * @param placa representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
     @Path("teste/{placa}")
+    @Produces("application/json; charset=ISO-8859-1")
     public Retirada teste(@PathParam("placa") String placa) {
         RetiradaDAO dao = new RetiradaDAO();
         Retirada retirada = dao.getLastRetiradaByPlaca(placa);
         return retirada;
     }
-    
+
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
     @Path("buscaVeiculo/{codigo}")
+    @Produces("application/json; charset=ISO-8859-1")
     public Response teste(@PathParam("codigo") Integer codigo) {
         RetiradaDAO dao = new RetiradaDAO();
         Veiculo veiculo = dao.getVeiculo(codigo);
         return Response.ok(gson.toJson(veiculo)).build();
     }
-    
+
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("buscaRetirada/{codigo}")
+    @Produces("application/json; charset=ISO-8859-1")
     public Response buscaRetirada(@PathParam("codigo") Integer codigo) {
         RetiradaDAO dao = new RetiradaDAO();
         Retirada ret = dao.buscar(codigo);

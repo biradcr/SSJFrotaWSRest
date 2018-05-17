@@ -21,13 +21,11 @@ import java.util.logging.Logger;
  * @author ubiratan
  */
 public class RetiradaDAO {
-    public RetiradaDAO()
-    {
+    public RetiradaDAO(){
     
     }
     
-    public boolean inserir(Retirada retirada)
-    {
+    public Retirada inserirRetirada(Retirada retirada){
         String sql = "INSERT INTO retiradas(local_inicio,data_hora_inicio,data_hora_fim,destino,local_devolucao,km_inicial,km_final, usuario,veiculo) VALUES(?,?,?,?,?,?,?,?,?)";
         Boolean retorno = false;
         PreparedStatement pst = Conexao.getPreparedStatement(sql);
@@ -49,7 +47,7 @@ public class RetiradaDAO {
             Logger.getLogger(RetiradaDAO.class.getName()).log(Level.SEVERE, null, ex);
             retorno = false;
         }        
-        return retorno;    
+        return retirada;    
     }
     
     public Retirada getLastRetiradaByPlaca(String placa){
