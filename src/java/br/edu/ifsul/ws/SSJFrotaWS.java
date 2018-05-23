@@ -77,18 +77,6 @@ public class SSJFrotaWS implements Serializable {
         return Response.ok(gson.toJson(r)).build();
       //  return dao.inserir(retirada);
     }
-    
-//    @POST
-//    @Consumes("application/json; charset=ISO-8859-1")
-//    @Produces("application/json; charset=ISO-8859-1")
-//    public Response salarioLiquido(Salario salario){
-//        if (salario.getSalarioBruto() <= 0.0 || salario.getNome().isEmpty()){
-//            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-//        }
-//        salario.setInss(calculoInss(salario.getSalarioBruto()));
-//        salario.setSalarioLiquido(salario.getSalarioBruto() - salario.getInss());
-//        return Response.ok(gson.toJson(salario)).build();
-//    }
   
     @PUT
 //    @Consumes(MediaType.APPLICATION_JSON)

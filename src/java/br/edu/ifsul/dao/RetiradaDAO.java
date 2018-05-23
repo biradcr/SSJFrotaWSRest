@@ -26,19 +26,15 @@ public class RetiradaDAO {
     }
     
     public Retirada inserirRetirada(Retirada retirada){
-        String sql = "INSERT INTO retiradas(local_inicio,data_hora_inicio,data_hora_fim,destino,local_devolucao,km_inicial,km_final, usuario,veiculo) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO retiradas(local_inicio,destino,local_devolucao, usuario,veiculo) VALUES(?,?,?,?,?)";
         Boolean retorno = false;
         PreparedStatement pst = Conexao.getPreparedStatement(sql);
         try {
             pst.setString(1, retirada.getLocalInicio());
-            pst.setTimestamp(2, retirada.getDataHoraInicio());
-            pst.setTimestamp(3, retirada.getDataHoraFim());
-            pst.setString(4, retirada.getDestino());
-            pst.setString(5, retirada.getLocalDevolucao());
-            pst.setInt(6, retirada.getKmInicial());
-            pst.setInt(7, retirada.getKmFinal());
-            pst.setInt(8, retirada.getUsuario());
-            pst.setInt(9, retirada.getVeiculo());            
+            pst.setString(2, retirada.getDestino());
+            pst.setString(3, retirada.getLocalDevolucao());
+            pst.setInt(4, retirada.getUsuario());
+            pst.setInt(5, retirada.getVeiculo());            
             if(pst.executeUpdate()>0)
             {
                 retorno = true;
