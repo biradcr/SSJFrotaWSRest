@@ -7,8 +7,10 @@ package br.edu.ifsul.ws;
 
 import com.google.gson.Gson;
 import br.edu.ifsul.dao.RetiradaDAO;
+import br.edu.ifsul.dao.UsuarioDAO;
 import br.edu.ifsul.dao.VeiculoDAO;
 import br.edu.ifsul.modelo.Retirada;
+import br.edu.ifsul.modelo.Usuario;
 import br.edu.ifsul.modelo.Veiculo;
 import java.io.Serializable;
 import java.util.List;
@@ -72,6 +74,7 @@ public class SSJFrotaWS implements Serializable {
     public Response inserir(Retirada retirada) {
 //     Gson g = new Gson();
 //    Retirada u = (Retirada) g.fromJson(content, Retirada.class);
+        System.out.println("Dados recebidos Veiculo: "+retirada.getVeiculo()+" Imei: "+retirada.getImei());
         RetiradaDAO dao = new RetiradaDAO();
         Retirada r = dao.inserirRetirada(retirada);
         return Response.ok(gson.toJson(r)).build();
@@ -101,13 +104,22 @@ public class SSJFrotaWS implements Serializable {
     }
 
     @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("buscaVeiculo/{codigo}")
     @Produces("application/json; charset=ISO-8859-1")
     public Response teste(@PathParam("codigo") Integer codigo) {
         RetiradaDAO dao = new RetiradaDAO();
         Veiculo veiculo = dao.getVeiculo(codigo);
         return Response.ok(gson.toJson(veiculo)).build();
+    }
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("buscaUsuario/{imei}")
+    @Produces("application/json; charset=ISO-8859-1")
+    public Response buscar(@PathParam("imei") String imei) {
+        UsuarioDAO dao = new UsuarioDAO();
+        Usuario usuario = dao.buscarUsuario(imei);
+        return Response.ok(gson.toJson(usuario)).build();
     }
 
     @GET

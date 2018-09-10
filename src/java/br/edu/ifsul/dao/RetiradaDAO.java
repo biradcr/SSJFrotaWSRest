@@ -26,15 +26,15 @@ public class RetiradaDAO {
     }
     
     public Retirada inserirRetirada(Retirada retirada){
-        String sql = "INSERT INTO retiradas(local_inicio,destino,local_devolucao, usuario,veiculo) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO retiradas(veiculo, imei_usuario) VALUES(?,?)";
         Boolean retorno = false;
         PreparedStatement pst = Conexao.getPreparedStatement(sql);
         try {
-            pst.setString(1, retirada.getLocalInicio());
-            pst.setString(2, retirada.getDestino());
-            pst.setString(3, retirada.getLocalDevolucao());
-            pst.setInt(4, retirada.getUsuario());
-            pst.setInt(5, retirada.getVeiculo());            
+            
+            System.out.println("Dados recebidos Veiculo no DAO: "+retirada.getVeiculo()+" Imei: "+retirada.getImei());
+            System.out.println("Dados recebidos Veiculo no DAO: "+retirada.toString());
+            pst.setInt(1, retirada.getVeiculo());            
+            pst.setString(2, retirada.getImei());
             if(pst.executeUpdate()>0)
             {
                 retorno = true;
@@ -171,6 +171,7 @@ public class RetiradaDAO {
                 retorno.setKmFinal(res.getInt("km_final"));
                 retorno.setUsuario(res.getInt("usuario"));
                 retorno.setVeiculo(res.getInt("veiculo"));
+                retorno.setImei(res.getString("imei_usuario"));
             }        
         } catch (SQLException ex) {
             Logger.getLogger(RetiradaDAO.class.getName()).log(Level.SEVERE, null, ex);            

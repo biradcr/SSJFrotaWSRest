@@ -21,6 +21,7 @@ public class Retirada {
     private String localDevolucao;
     private Integer kmInicial;
     private Integer kmFinal;
+    private String imei;
     private Integer usuario;
     private Integer veiculo;
 
@@ -86,7 +87,7 @@ public class Retirada {
 
     public void setKmFinal(Integer kmFinal) {
         this.kmFinal = kmFinal;
-    }
+    }    
 
     public Integer getUsuario() {
         return usuario;
@@ -102,6 +103,15 @@ public class Retirada {
 
     public void setVeiculo(Integer veiculo) {
         this.veiculo = veiculo;
+    }
+
+    public String getImei() {
+        return imei;
+        
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
     }
 
     
