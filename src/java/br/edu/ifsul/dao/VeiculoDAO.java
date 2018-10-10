@@ -49,4 +49,25 @@ public class VeiculoDAO {
     
     }
     
+    public Veiculo buscarVeiculo(Integer veiculo){
+         String sql = "SELECT * FROM veiculos WHERE codigo = ?";
+        Veiculo retorno = null;        
+        PreparedStatement pst = Conexao.getPreparedStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        try {           
+            pst.setInt(1, veiculo);
+            ResultSet res = pst.executeQuery();            
+            if(res.next()){
+                retorno = new Veiculo();
+                retorno.setCodigo(res.getInt("codigo"));
+                retorno.setModelo(res.getString("modelo"));
+                retorno.setCor(res.getString("cor"));
+                retorno.setKm(res.getInt("km"));
+                retorno.setPlaca(res.getString("placa"));
+            }        
+        } catch (SQLException ex) {
+            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);            
+        }        
+        return retorno;    
+    }
+    
 }

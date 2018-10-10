@@ -7,6 +7,7 @@ package br.edu.ifsul.dao;
 
 import br.edu.ifsul.conexao.Conexao;
 import br.edu.ifsul.modelo.Retirada;
+import br.edu.ifsul.modelo.Usuario;
 import br.edu.ifsul.modelo.Veiculo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,8 +30,7 @@ public class RetiradaDAO {
         String sql = "INSERT INTO retiradas(veiculo, imei_usuario) VALUES(?,?)";
         Boolean retorno = false;
         PreparedStatement pst = Conexao.getPreparedStatement(sql);
-        try {
-            
+        try {            
             System.out.println("Dados recebidos Veiculo no DAO: "+retirada.getVeiculo()+" Imei: "+retirada.getImei());
             System.out.println("Dados recebidos Veiculo no DAO: "+retirada.toString());
             pst.setInt(1, retirada.getVeiculo());            
@@ -42,8 +42,9 @@ public class RetiradaDAO {
         } catch (SQLException ex) {
             Logger.getLogger(RetiradaDAO.class.getName()).log(Level.SEVERE, null, ex);
             retorno = false;
-        }        
-        return retirada;    
+        }   
+       // System.out.println("Dados da retirada ### Código:"+retirada);
+        return retirada;           
     }
     
     public Retirada getLastRetiradaByPlaca(String placa){
@@ -153,30 +154,56 @@ public class RetiradaDAO {
         return retorno;
     }
     
-    public Retirada buscar(Integer retirada){
-         String sql = "SELECT * FROM retiradas where codigo=?";
-        Retirada retorno = null;        
+    public Retirada buscarRetirada(String retirada){
+         String sql = "SELECT * FROM retiradas, usuarios "
+                 + "WHERE imei_usuario = ? AND km_final is null "
+                 + "AND retiradas.usuario = usuarios.codigo";
+        
+        Retirada retornoR = null;       
         PreparedStatement pst = Conexao.getPreparedStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         try {           
-            pst.setInt(1, retirada);
+            pst.setString(1, retirada);
             ResultSet res = pst.executeQuery();            
             if(res.next()){
-                retorno = new Retirada();
-                retorno.setLocalInicio(res.getString("local_inicio"));
-                retorno.setDataHoraInicio(res.getTimestamp("data_hora_inicio"));
-                retorno.setDataHoraFim(res.getTimestamp("data_hora_fim"));
-                retorno.setDestino(res.getString("destino"));
-                retorno.setLocalDevolucao(res.getString("local_devolucao"));
-                retorno.setKmInicial(res.getInt("km_inicial"));
-                retorno.setKmFinal(res.getInt("km_final"));
-                retorno.setUsuario(res.getInt("usuario"));
-                retorno.setVeiculo(res.getInt("veiculo"));
-                retorno.setImei(res.getString("imei_usuario"));
+                retornoR = new Retirada();
+                retornoR.setCodigo(res.getInt("codigo"));
+                retornoR.setLocalInicio(res.getString("local_inicio"));
+                retornoR.setDataHoraInicio(res.getTimestamp("data_hora_inicio"));
+                retornoR.setDataHoraFim(res.getTimestamp("data_hora_fim"));
+                retornoR.setDestino(res.getString("destino"));
+                retornoR.setLocalDevolucao(res.getString("local_devolucao"));
+                retornoR.setKmInicial(res.getInt("km_inicial"));
+                retornoR.setKmFinal(res.getInt("km_final"));
+                retornoR.setUsuario(res.getInt("usuario"));
+                retornoR.setVeiculo(res.getInt("veiculo"));
+                retornoR.setImei(res.getString("imei_usuario"));
+                retornoR.setNomeUsuario(res.getString("nome"));
             }        
         } catch (SQLException ex) {
             Logger.getLogger(RetiradaDAO.class.getName()).log(Level.SEVERE, null, ex);            
         }        
-        return retorno;    
+        return retornoR;  
+    }
+    
+    public Retirada devolver(Retirada retirada){
+         String sql = "UPDATE retiradas SET destino = ?, km_final= ? "
+                 + "WHERE imei_usuario = ? AND km_final is null;";
+        Boolean retorno = false;        
+        PreparedStatement pst = Conexao.getPreparedStatement(sql);
+        try {           
+            pst.setString(1, retirada.getDestino());            
+            pst.setInt(2, retirada.getKmFinal());           
+            pst.setString(3, retirada.getImei());           
+            if(pst.executeUpdate()>0)
+            {
+                retorno = true;
+            }   
+        } catch (SQLException ex) {
+            Logger.getLogger(RetiradaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            retorno = false;
+        }   
+       // System.out.println("Dados da retirada ### Código:"+retirada);
+        return retirada;    
     }
 
 

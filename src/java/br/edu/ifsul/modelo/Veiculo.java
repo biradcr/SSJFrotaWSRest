@@ -19,7 +19,7 @@ public class Veiculo {
     private String cor;
     private Calendar ano;
     private Integer km;
-    private Integer placa;
+    private String placa;
     private Montadora montadora;
 
     public Integer getCodigo() {
@@ -62,11 +62,11 @@ public class Veiculo {
         this.km = km;
     }
 
-    public Integer getPlaca() {
+    public String getPlaca() {
         return placa;
     }
 
-    public void setPlaca(Integer placa) {
+    public void setPlaca(String placa) {
         this.placa = placa;
     }
 

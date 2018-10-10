@@ -24,6 +24,7 @@ public class Retirada {
     private String imei;
     private Integer usuario;
     private Integer veiculo;
+    private String nomeUsuario;
 
     public Integer getCodigo() {
         return codigo;
@@ -112,6 +113,20 @@ public class Retirada {
 
     public void setImei(String imei) {
         this.imei = imei;
+    }
+
+    /**
+     * @return the nomeUsuario
+     */
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    /**
+     * @param nomeUsuario the nomeUsuario to set
+     */
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
     

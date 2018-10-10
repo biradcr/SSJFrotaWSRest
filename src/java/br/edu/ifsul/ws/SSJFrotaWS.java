@@ -53,19 +53,6 @@ public class SSJFrotaWS implements Serializable {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Path("list")
-    @Produces("application/json; charset=ISO-8859-1")
-    public String listRetiradas() {
-        List<Retirada> lista;
-
-        RetiradaDAO dao = new RetiradaDAO();
-        lista = dao.listar();
-
-        //Converter para Gson
-        Gson g = new Gson();
-        return g.toJson(lista);
-    }
 
     @POST
     @Path("inserir")
@@ -77,30 +64,25 @@ public class SSJFrotaWS implements Serializable {
         System.out.println("Dados recebidos Veiculo: "+retirada.getVeiculo()+" Imei: "+retirada.getImei());
         RetiradaDAO dao = new RetiradaDAO();
         Retirada r = dao.inserirRetirada(retirada);
+        System.out.println("Dados da retirada ### Código:"+retirada.getCodigo());
         return Response.ok(gson.toJson(r)).build();
       //  return dao.inserir(retirada);
     }
-  
-    @PUT
-//    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("alterar")
-    @Produces("application/json; charset=ISO-8859-1")
-    public void alterar(String content) {
-        Gson g = new Gson();
-        Retirada u = (Retirada) g.fromJson(content, Retirada.class);
-        RetiradaDAO dao = new RetiradaDAO();
-        dao.atualizar(u);
-    }
-
     
-    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("teste/{placa}")
+    @PUT
+    @Path("devolver")
+    @Consumes("application/json; charset=ISO-8859-1")
     @Produces("application/json; charset=ISO-8859-1")
-    public Retirada teste(@PathParam("placa") String placa) {
+    public Response devolver(Retirada retirada) {
+//     Gson g = new Gson();
+//    Retirada u = (Retirada) g.fromJson(content, Retirada.class);
+        System.out.println("\nDados recebidos Destino: "+retirada.getDestino()+"\nImei: "+retirada.getImei()+
+                "\nKM Final: "+retirada.getKmFinal());
         RetiradaDAO dao = new RetiradaDAO();
-        Retirada retirada = dao.getLastRetiradaByPlaca(placa);
-        return retirada;
+        Retirada r = dao.devolver(retirada);
+   //     System.out.println("Dados da retirada ### Código:"+retirada.getCodigo());
+        return Response.ok(gson.toJson(r)).build();
+      //  return dao.inserir(retirada);
     }
 
     @GET
@@ -108,26 +90,28 @@ public class SSJFrotaWS implements Serializable {
     @Path("buscaVeiculo/{codigo}")
     @Produces("application/json; charset=ISO-8859-1")
     public Response teste(@PathParam("codigo") Integer codigo) {
-        RetiradaDAO dao = new RetiradaDAO();
-        Veiculo veiculo = dao.getVeiculo(codigo);
+        VeiculoDAO dao = new VeiculoDAO();
+        Veiculo veiculo = dao.buscarVeiculo(codigo);
         return Response.ok(gson.toJson(veiculo)).build();
     }
+    
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("buscaUsuario/{imei}")
     @Produces("application/json; charset=ISO-8859-1")
-    public Response buscar(@PathParam("imei") String imei) {
+    public Response buscaUsuario(@PathParam("imei") String imei) {
         UsuarioDAO dao = new UsuarioDAO();
         Usuario usuario = dao.buscarUsuario(imei);
         return Response.ok(gson.toJson(usuario)).build();
     }
 
     @GET
-    @Path("buscaRetirada/{codigo}")
+    @Path("buscaRetirada/{imei}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/json; charset=ISO-8859-1")
-    public Response buscaRetirada(@PathParam("codigo") Integer codigo) {
+    public Response buscaRetirada(@PathParam("imei") String imei) {
         RetiradaDAO dao = new RetiradaDAO();
-        Retirada ret = dao.buscar(codigo);
+        Retirada ret = dao.buscarRetirada(imei);
         return Response.ok(gson.toJson(ret)).build();
     }
 }

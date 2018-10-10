@@ -7,7 +7,6 @@ package br.edu.ifsul.dao;
 
 import br.edu.ifsul.conexao.Conexao;
 import br.edu.ifsul.modelo.Usuario;
-import br.edu.ifsul.modelo.Veiculo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,6 +50,7 @@ public class UsuarioDAO {
             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);            
         }
         return retorno;}    
+    
     public Usuario buscarUsuario(String usuario){
          String sql = "SELECT * FROM usuarios WHERE imei= ? AND ativo = true";
         Usuario retorno = null;        
@@ -66,7 +66,7 @@ public class UsuarioDAO {
                 retorno.setEmail(res.getString("email"));
                 retorno.setCnh_numero(res.getString("cnh_numero"));
                 retorno.setCnh_categoria(res.getString("cnh_categoria"));
-                retorno.setFone_particular(res.getString("fone_particula"));
+                retorno.setFone_particular(res.getString("fone_particular"));
                 retorno.setFone_corporativo(res.getString("fone_corporativo"));
                 retorno.setImei(res.getString("imei"));
                 retorno.setAtivo(res.getBoolean("ativo")); 
